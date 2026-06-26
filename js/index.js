@@ -12,7 +12,7 @@ document.addEventListener('DOMContentLoaded', () => {
         diaryOpen: false,
         cakeCut: false,
         giftOpen: false,
-        audio: null
+        audio: document.getElementById('bg-music')
     };
     const TOTAL = 6;
 
@@ -498,15 +498,73 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     /* ─── Music Player ────────────────────────────────────────────────────── */
+    const musicToggle = document.getElementById('music-toggle');
+
     const playMusic = () => {
-        if (state.audio) return;
-        try {
-            state.audio = new Audio('assets/music2.mp3');
-            state.audio.loop = true;
-            state.audio.volume = 0.5;
-            state.audio.play().catch(() => { });
-        } catch (e) { }
+        if (!state.audio) return;
+        state.audio.volume = 0.5;
+        state.audio.play()
+            .then(() => {
+                musicToggle?.classList.add('playing');
+                musicToggle?.classList.add('visible');
+                if (musicToggle) musicToggle.textContent = '🎵';
+            })
+            .catch(() => { });
     };
+
+    const toggleMusic = () => {
+        if (!state.audio) return;
+        if (state.audio.paused) {
+            state.audio.play();
+            musicToggle?.classList.add('playing');
+            if (musicToggle) musicToggle.textContent = '🎵';
+        } else {
+            state.audio.pause();
+            musicToggle?.classList.remove('playing');
+            if (musicToggle) musicToggle.textContent = '🔇';
+        }
+    };
+
+    if (musicToggle) {
+        musicToggle.addEventListener('click', toggleMusic);
+    }
+
+    /* ─── Fullscreen & Welcome Handler ────────────────────────────────────── */
+    const welcomeOverlay = document.getElementById('welcome-overlay');
+    const btnEnter = document.getElementById('btn-enter');
+
+    const enterFullscreen = () => {
+        const docEl = document.documentElement;
+        try {
+            if (docEl.requestFullscreen) {
+                docEl.requestFullscreen();
+            } else if (docEl.webkitRequestFullscreen) {
+                docEl.webkitRequestFullscreen();
+            } else if (docEl.mozRequestFullScreen) {
+                docEl.mozRequestFullScreen();
+            } else if (docEl.msRequestFullscreen) {
+                docEl.msRequestFullscreen();
+            }
+        } catch (err) {
+            console.warn("Fullscreen request ignored or failed:", err);
+        }
+    };
+
+    if (btnEnter && welcomeOverlay) {
+        btnEnter.addEventListener('click', () => {
+            // Trigger audio autoplay immediately upon interaction
+            playMusic();
+
+            // Try to enter fullscreen
+            enterFullscreen();
+
+            // Hide overlay with beautiful animation transition
+            welcomeOverlay.classList.add('hidden');
+
+            // Particle effect explosion on click
+            triggerBurst(window.innerWidth / 2, window.innerHeight / 2, 40, 'star');
+        });
+    }
 
     /* ─── Section 4: 3D Iridescent Soap-Bubbles Wishes ────────────────────── */
     const wishPopup = document.getElementById('wish-popup');
