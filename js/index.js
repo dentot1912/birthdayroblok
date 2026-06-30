@@ -275,37 +275,69 @@ document.addEventListener('DOMContentLoaded', () => {
         if (polaroidsLoaded) return;
         polaroidsLoaded = true;
 
-        const images = [
-            { src: 'assets/irl-01.jpeg', label: '✨' },
-            { src: 'assets/irl-02.jpeg', label: '😊' },
-            { src: 'assets/irl-03.jpeg', label: '🩷' },
-            { src: 'assets/irl-04.jpeg', label: '🧸' },
-            { src: 'assets/irl-05.jpeg', label: '☕' },
-            { src: 'assets/irl-06.jpeg', label: '🤪' },
-            { src: 'assets/irl-07.jpeg', label: '🤪' },
-            { src: 'assets/irl-08.jpeg', label: '🤪' },
-            { src: 'assets/irl-09.jpeg', label: '🤪' },
-            { src: 'assets/irl-10.jpeg', label: '🤪' },
-            { src: 'assets/irl-11.jpeg', label: '🤪' },
+        const media = [
+            { type: 'image', src: 'assets/irl-01.jpeg', label: '🩷' },
+            { type: 'image', src: 'assets/irl-02.jpeg', label: '🩷' },
+            { type: 'image', src: 'assets/irl-03.jpeg', label: '🩷' },
+            { type: 'image', src: 'assets/irl-04.jpeg', label: '🩷' },
+            { type: 'image', src: 'assets/irl-05.jpeg', label: '🩷' },
+            { type: 'image', src: 'assets/irl-06.jpeg', label: '🩷' },
+            { type: 'image', src: 'assets/irl-07.jpeg', label: '🩷' },
+            { type: 'image', src: 'assets/irl-08.jpeg', label: '🩷' },
+            { type: 'video', src: 'assets/irlvideo-01.mp4', label: '🩷' },
+            { type: 'video', src: 'assets/irlvideo-02.mp4', label: '🩷' },
+            { type: 'video', src: 'assets/irlvideo-03.mp4', label: '🩷' },
         ];
 
-        images.forEach((img, idx) => {
+        media.forEach((item, idx) => {
             const card = document.createElement('div');
             card.className = 'polaroid';
-            // Custom initial staggered rotations & stack indexes
+
             const rot = (idx % 2 === 0 ? -1 : 1) * (Math.random() * 5 + 2);
-            card.style.transform = `rotate(${rot}deg) scale(${1 - (images.length - 1 - idx) * 0.02}) translateY(${(images.length - 1 - idx) * -5}px)`;
+            card.style.transform =
+                `rotate(${rot}deg) scale(${1 - (media.length - 1 - idx) * 0.02}) translateY(${(media.length - 1 - idx) * -5}px)`;
             card.style.zIndex = idx;
 
-            card.innerHTML = `
-                <img src="${img.src}" alt="${img.label}">
-                <p class="polaroid-caption">${img.label}</p>
-            `;
+            if (item.type === 'video') {
+                card.innerHTML = `
+                    <video
+                        class="polaroid-video"
+                        src="${item.src}"
+                        muted
+                        loop
+                        playsinline
+                        preload="metadata">
+                    </video>
+                    <p class="polaroid-caption">${item.label}</p>
+                `;
+            } else {
+                card.innerHTML = `
+                    <img src="${item.src}" alt="${item.label}">
+                    <p class="polaroid-caption">${item.label}</p>
+                `;
+            }
 
             polaroidStack.appendChild(card);
             setupDragAndToss(card);
         });
+        updateVideos();
     };
+
+    function updateVideos() {
+        const cards = [...polaroidStack.querySelectorAll('.polaroid')];
+
+        cards.forEach((card, index) => {
+            const video = card.querySelector('video');
+            if (!video) return;
+
+            if (index === cards.length - 1) {
+                video.play().catch(() => {});
+            } else {
+                video.pause();
+                video.currentTime = 0;
+            }
+        });
+    }
 
     const setupDragAndToss = (card) => {
         let isDragging = false;
@@ -362,6 +394,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         c.style.transform = `rotate(${rot}deg) scale(${1 - (cards.length - 1 - idx) * 0.02}) translateY(${(cards.length - 1 - idx) * -5}px)`;
                         c.style.zIndex = idx;
                     });
+                    updateVideos();
                 }, 550);
             } else {
                 // Snap back to original stack position
@@ -480,7 +513,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         setTimeout(() => {
             cakeTitle.textContent = 'Yummy! Buat permohonan...';
-            cakeSub.textContent = 'Lilinnya sudah padam ditiup cinta! ✨';
+            cakeSub.textContent = 'Good job, evan! ✨';
             btnCakeNext.classList.remove('btn--hidden');
             btnCakeNext.classList.add('btn--visible');
         }, 800);
