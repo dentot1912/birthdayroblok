@@ -286,6 +286,8 @@ document.addEventListener('DOMContentLoaded', () => {
             { type: 'image', src: 'assets/irl-06.jpeg', label: '🩷' },
             { type: 'image', src: 'assets/irl-07.jpeg', label: '🩷' },
             { type: 'image', src: 'assets/irl-08.jpeg', label: '🩷' },
+            { type: 'image', src: 'assets/irlnew-1.jpeg', label: '🩷' },
+            { type: 'image', src: 'assets/irlnew-2.jpeg', label: '🩷' },
             { type: 'video', src: 'assets/irlvideo-01.mp4', label: '🩷' },
             { type: 'video', src: 'assets/irlvideo-02.mp4', label: '🩷' },
             { type: 'video', src: 'assets/irlvideo-03.mp4', label: '🩷' },
