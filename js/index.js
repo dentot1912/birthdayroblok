@@ -276,6 +276,8 @@ document.addEventListener('DOMContentLoaded', () => {
         polaroidsLoaded = true;
 
         const media = [
+            { type: 'video', src: 'assets/last.mp4', label: '🩷' },
+            { type: 'image', src: 'assets/first.jpeg', label: '🩷' },
             { type: 'image', src: 'assets/irl-01.jpeg', label: '🩷' },
             { type: 'image', src: 'assets/irl-02.jpeg', label: '🩷' },
             { type: 'image', src: 'assets/irl-03.jpeg', label: '🩷' },
